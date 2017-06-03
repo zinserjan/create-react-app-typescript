@@ -53,6 +53,24 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths
     { publicPath: Array(cssFilename.split('/').length).join('../') }
   : {};
 
+// Options for PostCSS as we reference these options twice
+// Adds vendor prefixing to support IE9 and above
+const postCSSLoaderOptions = {
+  ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+  plugins: () => [
+    require('postcss-flexbugs-fixes'),
+    autoprefixer({
+      browsers: [
+        '>1%',
+        'last 4 versions',
+        'Firefox ESR',
+        'not ie < 9', // React doesn't support IE8 anyway
+      ],
+      flexbox: 'no-2009',
+    }),
+  ],
+};
+
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
 // The development configuration is different and lives in a separate file.
@@ -150,6 +168,7 @@ module.exports = {
           /\.(js|jsx)$/,
           /\.(ts|tsx)$/,
           /\.css$/,
+          /\.scss$/,
           /\.json$/,
           /\.bmp$/,
           /\.gif$/,
@@ -191,6 +210,7 @@ module.exports = {
       // in the main CSS file.
       {
         test: /\.css$/,
+        exclude: /\.module\.css$/,
         loader: ExtractTextPlugin.extract(
           Object.assign(
             {
@@ -201,26 +221,101 @@ module.exports = {
                   options: {
                     importLoaders: 1,
                     minimize: true,
-                    sourceMap: true,
                   },
                 },
                 {
                   loader: require.resolve('postcss-loader'),
+                  options: postCSSLoaderOptions,
+                },
+              ],
+            },
+            extractTextPluginOptions
+          )
+        ),
+        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+      },
+      {
+        test: /\.module\.css$/,
+        loader: ExtractTextPlugin.extract(
+          Object.assign(
+            {
+              fallback: require.resolve('style-loader'),
+              use: [
+                {
+                  loader: require.resolve('css-loader'),
                   options: {
-                    ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
-                    plugins: () => [
-                      require('postcss-flexbugs-fixes'),
-                      autoprefixer({
-                        browsers: [
-                          '>1%',
-                          'last 4 versions',
-                          'Firefox ESR',
-                          'not ie < 9', // React doesn't support IE8 anyway
-                        ],
-                        flexbox: 'no-2009',
-                      }),
-                    ],
+                    importLoaders: 1,
+                    minimize: true,
+                    modules: true,
+                    namedExport: true,
+                    camelCase: true,
+                    localIdentName: '[hash:base64:5]',
                   },
+                },
+                {
+                  loader: require.resolve('postcss-loader'),
+                  options: postCSSLoaderOptions,
+                },
+              ],
+            },
+            extractTextPluginOptions
+          )
+        ),
+        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+      },
+      {
+        test: /\.scss$/,
+        exclude: /\.module\.scss$/,
+        loader: ExtractTextPlugin.extract(
+          Object.assign(
+            {
+              fallback: require.resolve('style-loader'),
+              use: [
+                {
+                  loader: require.resolve('css-loader'),
+                  options: {
+                    importLoaders: 2,
+                    minimize: true,
+                  },
+                },
+                {
+                  loader: require.resolve('postcss-loader'),
+                  options: postCSSLoaderOptions,
+                },
+                {
+                  loader: require.resolve('sass-loader'),
+                },
+              ],
+            },
+            extractTextPluginOptions
+          )
+        ),
+        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+      },
+      {
+        test: /\.module\.scss$/,
+        loader: ExtractTextPlugin.extract(
+          Object.assign(
+            {
+              fallback: require.resolve('style-loader'),
+              use: [
+                {
+                  loader: require.resolve('css-loader'),
+                  options: {
+                    importLoaders: 2,
+                    minimize: true,
+                    modules: true,
+                    namedExport: true,
+                    camelCase: true,
+                    localIdentName: '[hash:base64:5]',
+                  },
+                },
+                {
+                  loader: require.resolve('postcss-loader'),
+                  options: postCSSLoaderOptions,
+                },
+                {
+                  loader: require.resolve('sass-loader'),
                 },
               ],
             },

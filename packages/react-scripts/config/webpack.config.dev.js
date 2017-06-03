@@ -31,6 +31,24 @@ const publicUrl = '';
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
 
+// Options for PostCSS as we reference these options twice
+// Adds vendor prefixing to support IE9 and above
+const postCSSLoaderOptions = {
+  ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+  plugins: () => [
+    require('postcss-flexbugs-fixes'),
+    autoprefixer({
+      browsers: [
+        '>1%',
+        'last 4 versions',
+        'Firefox ESR',
+        'not ie < 9', // React doesn't support IE8 anyway
+      ],
+      flexbox: 'no-2009',
+    }),
+  ],
+};
+
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
 // The production configuration is different and lives in a separate file.
@@ -194,6 +212,7 @@ module.exports = {
       // in development "style" loader enables hot editing of CSS.
       {
         test: /\.css$/,
+        exclude: /\.module\.css$/,
         use: [
           require.resolve('style-loader'),
           {
@@ -204,21 +223,27 @@ module.exports = {
           },
           {
             loader: require.resolve('postcss-loader'),
+            options: postCSSLoaderOptions,
+          },
+        ],
+      },
+      {
+        test: /\.module\.css$/,
+        use: [
+          require.resolve('style-loader'),
+          {
+            loader: require.resolve('typings-for-css-modules-loader'),
             options: {
-              ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
-              plugins: () => [
-                require('postcss-flexbugs-fixes'),
-                autoprefixer({
-                  browsers: [
-                    '>1%',
-                    'last 4 versions',
-                    'Firefox ESR',
-                    'not ie < 9', // React doesn't support IE8 anyway
-                  ],
-                  flexbox: 'no-2009',
-                }),
-              ],
+              importLoaders: 1,
+              modules: true,
+              namedExport: true,
+              camelCase: true,
+              localIdentName: '[name]__[local]___[hash:base64:5]',
             },
+          },
+          {
+            loader: require.resolve('postcss-loader'),
+            options: postCSSLoaderOptions,
           },
         ],
       },
@@ -257,6 +282,7 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.WatchIgnorePlugin([/module\.css\.d\.ts$/]),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
