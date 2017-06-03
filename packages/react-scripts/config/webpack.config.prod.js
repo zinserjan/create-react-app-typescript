@@ -57,6 +57,7 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths
 // Adds vendor prefixing to support IE9 and above
 const postCSSLoaderOptions = {
   ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+  sourceMap: true,
   plugins: () => [
     require('postcss-flexbugs-fixes'),
     autoprefixer({
@@ -221,6 +222,7 @@ module.exports = {
                   loader: require.resolve('css-loader'),
                   options: {
                     importLoaders: 1,
+                    sourceMap: true,
                     minimize: true,
                   },
                 },
@@ -246,6 +248,7 @@ module.exports = {
                   loader: require.resolve('css-loader'),
                   options: {
                     importLoaders: 1,
+                    sourceMap: true,
                     minimize: true,
                     modules: true,
                     namedExport: true,
@@ -276,6 +279,7 @@ module.exports = {
                   loader: require.resolve('css-loader'),
                   options: {
                     importLoaders: 2,
+                    sourceMap: true,
                     minimize: true,
                   },
                 },
@@ -285,6 +289,9 @@ module.exports = {
                 },
                 {
                   loader: require.resolve('sass-loader'),
+                  options: {
+                    sourceMap: true,
+                  },
                 },
               ],
             },
@@ -304,6 +311,7 @@ module.exports = {
                   loader: require.resolve('css-loader'),
                   options: {
                     importLoaders: 2,
+                    sourceMap: true,
                     minimize: true,
                     modules: true,
                     namedExport: true,
@@ -317,6 +325,9 @@ module.exports = {
                 },
                 {
                   loader: require.resolve('sass-loader'),
+                  options: {
+                    sourceMap: true,
+                  },
                 },
               ],
             },

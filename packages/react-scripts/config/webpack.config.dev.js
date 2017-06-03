@@ -35,6 +35,7 @@ const env = getClientEnvironment(publicUrl);
 // Adds vendor prefixing to support IE9 and above
 const postCSSLoaderOptions = {
   ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+  sourceMap: true,
   plugins: () => [
     require('postcss-flexbugs-fixes'),
     autoprefixer({
@@ -221,6 +222,7 @@ module.exports = {
             loader: require.resolve('css-loader'),
             options: {
               importLoaders: 1,
+              sourceMap: true,
             },
           },
           {
@@ -237,6 +239,7 @@ module.exports = {
             loader: require.resolve('typings-for-css-modules-loader'),
             options: {
               importLoaders: 1,
+              sourceMap: true,
               modules: true,
               namedExport: true,
               camelCase: true,
@@ -258,6 +261,7 @@ module.exports = {
             loader: require.resolve('css-loader'),
             options: {
               importLoaders: 2,
+              sourceMap: true,
             },
           },
           {
@@ -266,6 +270,9 @@ module.exports = {
           },
           {
             loader: require.resolve('sass-loader'),
+            options: {
+              sourceMap: true,
+            },
           },
         ],
       },
@@ -277,6 +284,7 @@ module.exports = {
             loader: require.resolve('typings-for-css-modules-loader'),
             options: {
               importLoaders: 2,
+              sourceMap: true,
               modules: true,
               namedExport: true,
               camelCase: true,
@@ -289,6 +297,9 @@ module.exports = {
           },
           {
             loader: require.resolve('sass-loader'),
+            options: {
+              sourceMap: true,
+            },
           },
         ],
       },
