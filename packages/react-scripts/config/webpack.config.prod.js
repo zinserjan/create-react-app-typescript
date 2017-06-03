@@ -198,6 +198,7 @@ module.exports = {
       },
       // The notation here is somewhat confusing.
       // "postcss" loader applies autoprefixer to our CSS.
+      // "sass" loader compiles scss to css.
       // "css" loader resolves paths in CSS and adds assets as dependencies.
       // "style" loader normally turns CSS into JS modules injecting <style>,
       // but unlike in development configuration, we do something different.

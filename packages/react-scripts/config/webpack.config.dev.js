@@ -177,6 +177,7 @@ module.exports = {
           /\.(js|jsx)(\?.*)?$/,
           /\.(ts|tsx)(\?.*)?$/,
           /\.css$/,
+          /\.scss$/,
           /\.json$/,
           /\.bmp$/,
           /\.gif$/,
@@ -206,6 +207,7 @@ module.exports = {
         loader: require.resolve('ts-loader'),
       },
       // "postcss" loader applies autoprefixer to our CSS.
+      // "sass" loader compiles scss to css.
       // "css" loader resolves paths in CSS and adds assets as dependencies.
       // "style" loader turns CSS into JS modules that inject <style> tags.
       // In production, we use a plugin to extract that CSS to a file, but
@@ -247,6 +249,49 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.scss$/,
+        exclude: /\.module\.scss$/,
+        use: [
+          require.resolve('style-loader'),
+          {
+            loader: require.resolve('css-loader'),
+            options: {
+              importLoaders: 2,
+            },
+          },
+          {
+            loader: require.resolve('postcss-loader'),
+            options: postCSSLoaderOptions,
+          },
+          {
+            loader: require.resolve('sass-loader'),
+          },
+        ],
+      },
+      {
+        test: /\.module\.scss$/,
+        use: [
+          require.resolve('style-loader'),
+          {
+            loader: require.resolve('typings-for-css-modules-loader'),
+            options: {
+              importLoaders: 2,
+              modules: true,
+              namedExport: true,
+              camelCase: true,
+              localIdentName: '[name]__[local]___[hash:base64:5]',
+            },
+          },
+          {
+            loader: require.resolve('postcss-loader'),
+            options: postCSSLoaderOptions,
+          },
+          {
+            loader: require.resolve('sass-loader'),
+          },
+        ],
+      },
       // ** STOP ** Are you adding a new loader?
       // Remember to add the new extension(s) to the "url" loader exclusion list.
     ],
@@ -282,7 +327,10 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.WatchIgnorePlugin([/module\.css\.d\.ts$/]),
+    new webpack.WatchIgnorePlugin([
+      /module\.css\.d\.ts$/,
+      /module\.scss\.d\.ts$/,
+    ]),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

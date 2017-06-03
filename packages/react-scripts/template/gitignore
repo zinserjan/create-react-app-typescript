@@ -22,3 +22,4 @@ yarn-error.log*
 
 # automatically generated typings by css-modules
 src/**/*.module.css.d.ts
+src/**/*.module.scss.d.ts
