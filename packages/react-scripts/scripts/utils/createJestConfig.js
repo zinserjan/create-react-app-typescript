@@ -34,7 +34,8 @@ module.exports = (resolve, rootDir) => {
     testEnvironment: 'node',
     testURL: 'http://localhost',
     transform: {
-      '^.+\\.css$': resolve('config/jest/cssTransform.js'),
+      '^((?!\\.module).)*\\.css$': resolve('config/jest/cssTransform.js'),
+      '^((?!\\.module).)*\\.scss$': resolve('config/jest/cssTransform.js'),
       '^.+\\.tsx?$': resolve('config/jest/typescriptTransform.js'),
       '^(?!.*\\.(css|json)$)': resolve('config/jest/fileTransform.js'),
     },
@@ -43,6 +44,8 @@ module.exports = (resolve, rootDir) => {
     ],
     moduleNameMapper: {
       '^react-native$': 'react-native-web',
+      '^.+\\.css$': require.resolve('identity-obj-proxy'),
+      '^.+\\.scss$': require.resolve('identity-obj-proxy'),
     },
   };
   if (rootDir) {
