@@ -16,6 +16,8 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const PostCssPipelineWebpackPlugin = require('postcss-pipeline-webpack-plugin');
+const cssnano = require('cssnano');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
@@ -223,7 +225,6 @@ module.exports = {
                   options: {
                     importLoaders: 1,
                     sourceMap: true,
-                    minimize: true,
                   },
                 },
                 {
@@ -249,7 +250,6 @@ module.exports = {
                   options: {
                     importLoaders: 1,
                     sourceMap: true,
-                    minimize: true,
                     modules: true,
                     namedExport: true,
                     camelCase: true,
@@ -280,7 +280,6 @@ module.exports = {
                   options: {
                     importLoaders: 2,
                     sourceMap: true,
-                    minimize: true,
                   },
                 },
                 {
@@ -312,7 +311,6 @@ module.exports = {
                   options: {
                     importLoaders: 2,
                     sourceMap: true,
-                    minimize: true,
                     modules: true,
                     namedExport: true,
                     camelCase: true,
@@ -386,6 +384,25 @@ module.exports = {
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
     new ExtractTextPlugin({
       filename: cssFilename,
+    }),
+    // Minify generated css files
+    new PostCssPipelineWebpackPlugin({
+      suffix: false,
+      pipeline: [
+        cssnano({
+          // options from css-loader
+          // see https://github.com/webpack-contrib/css-loader/blob/c2e093448b055b4f3ba89c022e04e62f375cca77/lib/processCss.js#L189
+          zindex: false,
+          normalizeUrl: false,
+          discardUnused: false,
+          mergeIdents: false,
+          reduceIdents: false,
+          autoprefixer: false,
+        }),
+      ],
+      map: {
+        inline: false,
+      },
     }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
