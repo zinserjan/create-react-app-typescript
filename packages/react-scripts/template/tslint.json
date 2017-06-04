@@ -23,11 +23,26 @@
         "jsx-no-multiline-js": false,
         "label-position": true,
         "max-line-length": [ true, 120 ],
+        "member-access": [true, "no-public"],
         "member-ordering": [
             true,
-            "public-before-private",
-            "static-before-instance",
-            "variables-before-functions"
+            {
+                "order": [
+                    // static fields
+                    "public-static-field",
+                    "protected-static-field",
+                    "private-static-field",
+                    // instance fields
+                    "public-instance-field",
+                    "protected-instance-field",
+                    "private-instance-field",
+                    "constructor"
+                    // methods should be grouped by   functionality rather than by scope or accessibility.
+                    // For example, a private class method can be in
+                    // between two public instance methods. The goal is
+                    // to make reading and understanding the code easier.
+                ]
+            }
         ],
         "no-any": true,
         "no-arg": true,
@@ -42,7 +57,7 @@
             "timeEnd",
             "trace"
         ],
-        "no-consecutive-blank-lines": true,
+        "no-consecutive-blank-lines": [true, 2],
         "no-construct": true,
         "no-debugger": true,
         "no-duplicate-variable": true,
@@ -61,13 +76,17 @@
             "check-open-brace",
             "check-whitespace"
         ],
-        "quotemark": [true, "single", "jsx-double"],
+        "quotemark": [true, "double", "jsx-double"],
         "radix": true,
-        "semicolon": [true, "always"],
+        "semicolon": [true, "always", "ignore-bound-class-methods"],
         "switch-default": true,
-
-        "trailing-comma": false,
-
+        "trailing-comma": [
+            true,
+            {
+                "multiline": "always",
+                "singleline": "never"
+            }
+        ],
         "triple-equals": [ true, "allow-null-check" ],
         "typedef": [
             true,
@@ -84,7 +103,7 @@
                 "variable-declaration": "nospace"
             }
         ],
-        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"],
+        "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"],
         "whitespace": [
             true,
             "check-branch",
