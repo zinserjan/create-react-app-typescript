@@ -66,5 +66,8 @@
   },
   "optionalDependencies": {
     "fsevents": "1.0.17"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
