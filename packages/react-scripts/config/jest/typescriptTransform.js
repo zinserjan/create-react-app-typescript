@@ -26,9 +26,22 @@ if (fs.existsSync(tsconfigPath)) {
 }
 
 module.exports = {
-  process(src, path) {
+  process(src, path, config, options) {
     if (path.endsWith('.ts') || path.endsWith('.tsx')) {
-      return tsc.transpile(src, compilerConfig, path, []);
+      let compilerOptions = compilerConfig;
+      // inline source with source map for remapping coverage
+      if (options.instrument) {
+        compilerOptions = Object.assign({}, compilerConfig);
+        delete compilerOptions.sourceMap;
+        compilerOptions.inlineSourceMap = true;
+        compilerOptions.inlineSources = true;
+      }
+
+      const tsTranspiled = tsc.transpileModule(src, {
+        compilerOptions: compilerOptions,
+        fileName: path,
+      });
+      return tsTranspiled.outputText;
     }
     return src;
   },
