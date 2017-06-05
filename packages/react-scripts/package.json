@@ -1,5 +1,5 @@
 {
-  "name": "react-scripts-ts",
+  "name": "@zinserjan/react-scripts-ts",
   "version": "2.2.0",
   "description": "Configuration and scripts for Create React App.",
   "repository": "wmonk/create-react-app",

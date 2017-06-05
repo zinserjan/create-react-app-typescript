@@ -9,10 +9,18 @@ _Do you know react and want to try out typescript? Or do you know typescript and
 ```sh
 npm install -g create-react-app
 
-create-react-app my-app --scripts-version=react-scripts-ts
+create-react-app my-app --scripts-version=@zinserjan/react-scripts-ts
 cd my-app/
 npm start
 ```
+
+## Differences
+* Better CSS minification via postcss-pipeline-webpack-plugin/cssnano
+* CSS-Modules
+* SCSS
+* Decorators
+* EditorConfig
+* TSLint tweaks
 
 ## Features
 
