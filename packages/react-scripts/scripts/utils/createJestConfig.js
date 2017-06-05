@@ -24,7 +24,11 @@ module.exports = (resolve, rootDir) => {
   // in Jest configs. We need help from somebody with Windows to determine this.
   const config = {
     mapCoverage: true,
-    collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],
+    collectCoverageFrom: [
+      'src/**/*.{ts,tsx}',
+      '!src/**/*.d.{ts,tsx}',
+      '!src/**/*.story.{ts,tsx}',
+    ],
     setupFiles: [resolve('config/polyfills.js')],
     setupTestFrameworkScriptFile: setupTestsFile,
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
