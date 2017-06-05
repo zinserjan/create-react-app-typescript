@@ -338,6 +338,7 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    // Tell webpack to ignore the generated typings for css modules -> faster rebuilds
     new webpack.WatchIgnorePlugin([
       /module\.css\.d\.ts$/,
       /module\.scss\.d\.ts$/,
