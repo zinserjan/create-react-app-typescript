@@ -128,6 +128,7 @@ module.exports = function(
     '@types/react',
     '@types/react-dom',
     '@types/jest',
+    '@types/webpack-env',
   ];
 
   console.log(`Installing ${types.join(', ')} ${command}...`);
