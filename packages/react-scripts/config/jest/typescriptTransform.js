@@ -6,6 +6,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const tsc = require('typescript');
 const tsconfigPath = require('app-root-path').resolve('/tsconfig.json');
+const THIS_FILE = fs.readFileSync(__filename);
 
 let compilerConfig = {
   module: tsc.ModuleKind.CommonJS,
@@ -31,11 +32,20 @@ module.exports = {
     }
     return src;
   },
-  getCacheKey(fileData, filePath, configStr) {
+  getCacheKey(fileData, filePath, configStr, options) {
     return crypto
       .createHash('md5')
-      .update(JSON.stringify(compilerConfig), 'utf8')
-      .update(fileData + filePath + configStr, 'utf8')
+      .update(THIS_FILE)
+      .update('\0', 'utf8')
+      .update(fileData)
+      .update('\0', 'utf8')
+      .update(filePath)
+      .update('\0', 'utf8')
+      .update(configStr)
+      .update('\0', 'utf8')
+      .update(JSON.stringify(compilerConfig))
+      .update('\0', 'utf8')
+      .update(options.instrument ? 'instrument' : '')
       .digest('hex');
   },
 };
