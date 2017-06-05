@@ -39,6 +39,18 @@ module.exports = function(storybookBaseConfig) {
   storybookBaseConfig.output.devtoolModuleFilenameTemplate = info =>
     path.resolve(info.absoluteResourcePath);
 
+  // This allows you to set a fallback for where Webpack should look for modules.
+  // We placed these paths second because we want `node_modules` to "win"
+  // if there are any conflicts. This matches Node resolution mechanism.
+  // https://github.com/facebookincubator/create-react-app/issues/253
+  storybookBaseConfig.resolve.modules = [
+    'node_modules',
+    paths.appNodeModules,
+  ].concat(
+    // It is guaranteed to exist because we tweak it in `env.js`
+    process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
+  );
+
   // Add typescript extensions as a common filename extension
   storybookBaseConfig.resolve.extensions = [
     '.ts',
