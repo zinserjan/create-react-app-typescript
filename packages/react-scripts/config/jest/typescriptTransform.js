@@ -35,6 +35,9 @@ module.exports = {
         delete compilerOptions.sourceMap;
         compilerOptions.inlineSourceMap = true;
         compilerOptions.inlineSources = true;
+        // fix broken paths in coverage report if `.outDir` is set
+        // e.g. src/file:/Users/zinserjan/Projects/Github/react-typescript-starter/src
+        delete compilerOptions.outDir;
       }
 
       const tsTranspiled = tsc.transpileModule(src, {
