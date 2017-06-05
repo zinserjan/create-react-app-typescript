@@ -2,7 +2,7 @@
   "name": "@zinserjan/react-scripts-ts",
   "version": "2.2.0",
   "description": "Configuration and scripts for Create React App.",
-  "repository": "wmonk/create-react-app",
+  "repository": "zinserjan/create-react-app",
   "license": "BSD-3-Clause",
   "engines": {
     "node": ">=6"
