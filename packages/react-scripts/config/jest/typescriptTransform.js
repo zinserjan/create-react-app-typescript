@@ -3,13 +3,14 @@
 'use strict';
 
 const fs = require('fs');
+const crypto = require('crypto');
 const tsc = require('typescript');
 const tsconfigPath = require('app-root-path').resolve('/tsconfig.json');
 
 let compilerConfig = {
   module: tsc.ModuleKind.CommonJS,
   jsx: tsc.JsxEmit.React,
-}
+};
 
 if (fs.existsSync(tsconfigPath)) {
   try {
@@ -18,18 +19,23 @@ if (fs.existsSync(tsconfigPath)) {
     if (tsconfig && tsconfig.compilerOptions) {
       compilerConfig = tsconfig.compilerOptions;
     }
-  } catch (e) { /* Do nothing - default is set */ }
+  } catch (e) {
+    /* Do nothing - default is set */
+  }
 }
 
 module.exports = {
   process(src, path) {
     if (path.endsWith('.ts') || path.endsWith('.tsx')) {
-      return tsc.transpile(
-        src,
-        compilerConfig,
-        path, []
-      );
+      return tsc.transpile(src, compilerConfig, path, []);
     }
     return src;
+  },
+  getCacheKey(fileData, filePath, configStr) {
+    return crypto
+      .createHash('md5')
+      .update(JSON.stringify(compilerConfig), 'utf8')
+      .update(fileData + filePath + configStr, 'utf8')
+      .digest('hex');
   },
 };
