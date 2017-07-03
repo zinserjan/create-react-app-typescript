@@ -251,7 +251,7 @@ module.exports = function(storybookBaseConfig) {
   ];
 
   // Add common plugins
-  storybookBaseConfig.plugins.concat([
+  storybookBaseConfig.plugins = storybookBaseConfig.plugins.concat([
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
     new webpack.DefinePlugin(env.stringified),
