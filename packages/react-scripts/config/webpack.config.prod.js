@@ -246,7 +246,7 @@ module.exports = {
               fallback: require.resolve('style-loader'),
               use: [
                 {
-                  loader: require.resolve('css-loader'),
+                  loader: require.resolve('typings-for-css-modules-loader'),
                   options: {
                     importLoaders: 1,
                     sourceMap: true,
@@ -307,7 +307,7 @@ module.exports = {
               fallback: require.resolve('style-loader'),
               use: [
                 {
-                  loader: require.resolve('css-loader'),
+                  loader: require.resolve('typings-for-css-modules-loader'),
                   options: {
                     importLoaders: 2,
                     sourceMap: true,
