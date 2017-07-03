@@ -15,6 +15,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const TsCheckerWebpackPlugin = require('ts-checker-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
@@ -143,14 +144,6 @@ module.exports = {
       // We are waiting for https://github.com/facebookincubator/create-react-app/issues/2176.
       // { parser: { requireEnsure: false } },
 
-      // First, run the linter.
-      // It's important to do this before Babel processes the JS.
-      {
-        test: /\.(ts|tsx)$/,
-        loader: require.resolve('tslint-loader'),
-        enforce: 'pre',
-        include: paths.appSrc,
-      },
       {
         test: /\.js$/,
         loader: require.resolve('source-map-loader'),
@@ -206,6 +199,9 @@ module.exports = {
         test: /\.(ts|tsx)$/,
         include: paths.appSrc,
         loader: require.resolve('ts-loader'),
+        options: {
+          transpileOnly: true,
+        },
       },
       // "postcss" loader applies autoprefixer to our CSS.
       // "sass" loader compiles scss to css.
@@ -343,6 +339,12 @@ module.exports = {
       /module\.css\.d\.ts$/,
       /module\.scss\.d\.ts$/,
     ]),
+    // Type check the files
+    new TsCheckerWebpackPlugin({
+      tsconfig: path.join(paths.appPath, 'tsconfig.json'),
+      tslint: path.join(paths.appPath, 'tslint.json'),
+      memoryLimit: 2048,
+    }),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

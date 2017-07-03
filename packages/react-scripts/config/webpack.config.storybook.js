@@ -4,6 +4,7 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const TsCheckerWebpackPlugin = require('ts-checker-webpack-plugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 
@@ -89,12 +90,6 @@ module.exports = function(storybookBaseConfig) {
   // Register loaders
   storybookBaseConfig.module.rules = [
     {
-      test: /\.(ts|tsx)$/,
-      loader: require.resolve('tslint-loader'),
-      enforce: 'pre',
-      include: paths.appSrc,
-    },
-    {
       test: /\.js$/,
       loader: require.resolve('source-map-loader'),
       enforce: 'pre',
@@ -149,6 +144,9 @@ module.exports = function(storybookBaseConfig) {
       test: /\.(ts|tsx)$/,
       include: paths.appSrc,
       loader: require.resolve('ts-loader'),
+      options: {
+        transpileOnly: true,
+      },
     },
     // "postcss" loader applies autoprefixer to our CSS.
     // "sass" loader compiles scss to css.
@@ -266,6 +264,12 @@ module.exports = function(storybookBaseConfig) {
       /module\.css\.d\.ts$/,
       /module\.scss\.d\.ts$/,
     ]),
+    // Type check the files
+    new TsCheckerWebpackPlugin({
+      tsconfig: path.join(paths.appPath, 'tsconfig.json'),
+      tslint: path.join(paths.appPath, 'tslint.json'),
+      memoryLimit: 2048,
+    }),
   ]);
 
   return storybookBaseConfig;
