@@ -31,6 +31,20 @@ When you run `npm run build` the terminal will output the error, including the h
 
 ## Changelog
 
+### 2.3.2
+* Fix `typescript` version to 2.3.x until 2.4 @types are fixed
+
+### 2.3.1
+* Fix issue with new @types/react
+
+### 2.3.0
+* All tsc to parse config (for `extend`) - Thanks to @DorianGrey
+* Fix various jest issues - thanks to @zinserjan
+* Fix code coverage - thanks to @zinserjan
+
+### 2.2.0
+* Upgrade to [`react-scripts@1.0.6`](https://github.com/facebookincubator/create-react-app/)
+
 ### 2.1.0
 * Update to `tslint@5.2.0` - thanks to @mindjuice
 * Fix test setup issue - thanks to @jonmpqts

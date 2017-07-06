@@ -15,7 +15,7 @@ let compilerConfig = {
 
 if (fs.existsSync(tsconfigPath)) {
   try {
-    const tsconfig = require(tsconfigPath);
+    const tsconfig = tsc.readConfigFile(tsconfigPath).config;
 
     if (tsconfig && tsconfig.compilerOptions) {
       compilerConfig = tsconfig.compilerOptions;
@@ -29,14 +29,13 @@ module.exports = {
   process(src, path, config, options) {
     if (path.endsWith('.ts') || path.endsWith('.tsx')) {
       let compilerOptions = compilerConfig;
-      // inline source with source map for remapping coverage
       if (options.instrument) {
+        // inline source with source map for remapping coverage
         compilerOptions = Object.assign({}, compilerConfig);
         delete compilerOptions.sourceMap;
         compilerOptions.inlineSourceMap = true;
         compilerOptions.inlineSources = true;
         // fix broken paths in coverage report if `.outDir` is set
-        // e.g. src/file:/Users/zinserjan/Projects/Github/react-typescript-starter/src
         delete compilerOptions.outDir;
       }
 
